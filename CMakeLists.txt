@@ -14,6 +14,10 @@ if(POLICY CMP0141)
   set(CMAKE_POLICY_DEFAULT_CMP0141 NEW)
 endif()
 
+set(TBB_DIR ${CMAKE_CURRENT_LIST_DIR}/tbb/cmake)
+#MESSAGE(STATUS "CMAKE_ROOT: " ${CMAKE_CURRENT_LIST_DIR})
+#MESSAGE(STATUS "CMAKE_CURRENT_BINARY_DIR" ${CMAKE_CURRENT_BINARY_DIR})
+
 ##############################################################################
 # - Download and initialize RAPIDS CMake helpers -----------------------------
 
@@ -67,10 +71,8 @@ message(STATUS "Build date       : ${STDEXEC_BUILD_DATE}")
 message(STATUS "Build year       : ${STDEXEC_BUILD_YEAR}")
 message(STATUS)
 
-if (STDEXEC_IS_TOP_LEVEL)
-  # Integrate with LLVM/clang tooling
-  include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/clangd_compile_info.cmake)
-endif()
+# Integrate with LLVM/clang tooling
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/clangd_compile_info.cmake)
 
 # Write the version header
 rapids_cmake_write_version_file(include/stdexec_version_config.hpp)
@@ -358,7 +360,7 @@ if(STDEXEC_ENABLE_CUDA)
 endif ()
 
 
-option(STDEXEC_ENABLE_TBB "Enable TBB targets" OFF)
+option(STDEXEC_ENABLE_TBB "Enable TBB targets" ON)
 
 if (STDEXEC_ENABLE_TBB)
     include(rapids-find)
@@ -393,7 +395,7 @@ if (STDEXEC_ENABLE_TBB)
         FILE_SET headers)
 endif()
 
-option(STDEXEC_ENABLE_TASKFLOW "Enable TaskFlow targets" OFF)
+option(STDEXEC_ENABLE_TASKFLOW "Enable TaskFlow targets" ON)
 
 if(STDEXEC_ENABLE_TASKFLOW)
     include(rapids-find)
@@ -414,7 +416,7 @@ if(STDEXEC_ENABLE_TASKFLOW)
       )
 endif()
 
-option(STDEXEC_ENABLE_ASIO "Enable Boost targets" OFF)
+option(STDEXEC_ENABLE_ASIO "Enable Boost targets" ON)
 set(STDEXEC_ASIO_IMPLEMENTATION "boost" CACHE STRING "boost")
 set_property(CACHE STDEXEC_ASIO_IMPLEMENTATION PROPERTY STRINGS boost standalone)
 
