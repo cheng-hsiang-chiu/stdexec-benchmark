@@ -90,3 +90,88 @@ if(STDEXEC_ENABLE_ASIO)
 add_executable(example.benchmark.asio_thread_pool benchmark/asio_thread_pool.cpp)
 target_link_libraries(example.benchmark.asio_thread_pool PRIVATE STDEXEC::asio_pool)
 endif()
+
+
+
+
+# for_each benchmark
+add_executable(
+  benchmark.for_each 
+  benchmark/for_each/main.cpp
+  benchmark/for_each/stdexec.cpp)
+target_link_libraries(
+  benchmark.for_each
+  PRIVATE STDEXEC::stdexec
+          stdexec_executable_flags
+)
+
+# fibonacci benchmark
+add_executable(
+  benchmark.fibonacci
+  benchmark/fibonacci/main.cpp
+  benchmark/fibonacci/stdexec.cpp)
+target_link_libraries(
+  benchmark.fibonacci
+  PRIVATE STDEXEC::stdexec
+          stdexec_executable_flags
+          STDEXEC::tbbpool
+)
+
+# linear_chain benchmark
+add_executable(
+  benchmark.linear_chain
+  benchmark/linear_chain/main.cpp
+  benchmark/linear_chain/stdexec.cpp)
+target_link_libraries(
+  benchmark.linear_chain
+  PRIVATE STDEXEC::stdexec
+          stdexec_executable_flags
+)
+
+# integrate benchmark
+add_executable(
+  benchmark.integrate
+  benchmark/integrate/main.cpp
+  benchmark/integrate/stdexec.cpp)
+target_link_libraries(
+  benchmark.integrate
+  PRIVATE STDEXEC::stdexec
+          stdexec_executable_flags
+          STDEXEC::tbbpool
+)
+
+# primes benchmark
+add_executable(
+  benchmark.primes
+  benchmark/primes/main.cpp
+  benchmark/primes/stdexec.cpp)
+target_link_libraries(
+  benchmark.primes
+  PRIVATE STDEXEC::stdexec
+          stdexec_executable_flags
+          STDEXEC::tbbpool
+)
+
+# reduce_sum benchmark
+add_executable(
+  benchmark.reduce_sum
+  benchmark/reduce_sum/main.cpp
+  benchmark/reduce_sum/stdexec.cpp)
+target_link_libraries(
+  benchmark.reduce_sum
+  PRIVATE STDEXEC::stdexec
+          stdexec_executable_flags
+          STDEXEC::tbbpool
+)
+
+# sort benchmark
+add_executable(
+  benchmark.sort
+  benchmark/sort/main.cpp
+  benchmark/sort/stdexec.cpp)
+target_link_libraries(
+  benchmark.sort
+  PRIVATE STDEXEC::stdexec
+          stdexec_executable_flags
+          STDEXEC::tbbpool
+)
