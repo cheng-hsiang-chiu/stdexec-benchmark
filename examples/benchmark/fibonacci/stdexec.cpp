@@ -73,15 +73,13 @@ size_t measure_time_stdexec(size_t num_threads, size_t num_fibonacci) {
 
   size_t elapsed;
 
-  for (size_t i = 0; i < 1; ++i) {
-    auto snd = std::visit(
-      [&](auto&& pool) { return fib_sender(fib_s{2, num_fibonacci, pool.get_scheduler()}); }, pool);
+  auto snd = std::visit(
+    [&](auto&& pool) { return fib_sender(fib_s{2, num_fibonacci, pool.get_scheduler()}); }, pool);
 
-    auto time = measure<std::chrono::microseconds>(
-      [&] { std::tie(result) = stdexec::sync_wait(std::move(snd)).value(); });
-   
-    elapsed = static_cast<size_t>(time); 
-  }
+  auto time = measure<std::chrono::microseconds>(
+    [&] { std::tie(result) = stdexec::sync_wait(std::move(snd)).value(); });
+  
+  elapsed = static_cast<size_t>(time); 
   
   return elapsed;
 }

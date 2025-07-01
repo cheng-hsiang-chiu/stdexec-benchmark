@@ -72,42 +72,6 @@ auto measure(F&& f) {
   return std::chrono::duration_cast<duration>(std::chrono::steady_clock::now() - start).count();
 }
 
-/*
-auto main(int argc, char** argv) -> int {
-  if (argc != 4) {
-    std::cerr << "Usage: example.integrate n rounds tbb" << std::endl;
-    return -1;
-  }
-  static constexpr size_t warmup = 1;
-  double n = std::strtol(argv[1], nullptr, 10);
-  size_t rounds = std::strtol(argv[2], nullptr, 10);
-
-  std::variant<execpools::tbb_thread_pool, exec::static_thread_pool> pool;
-
-  if (argv[3] == std::string_view("tbb")) {
-    pool.emplace<execpools::tbb_thread_pool>(static_cast<int>(std::thread::hardware_concurrency()));
-  } else {
-    pool.emplace<exec::static_thread_pool>(
-      std::thread::hardware_concurrency(), exec::bwos_params{}, exec::get_numa_policy());
-  }
-
-  std::vector<unsigned long> times;
-  double result;
-  
-  for (unsigned long i = 0; i < rounds; ++i) {
-    auto snd = std::visit(
-      [&](auto&& pool) { return integrate_sender(integrate_s{0.0, fn(0.0), n, fn(n), 0.0, pool.get_scheduler()}); }, pool);
-
-    auto time = measure<std::chrono::milliseconds>(
-      [&] { std::tie(result) = stdexec::sync_wait(std::move(snd)).value(); });
-    times.push_back(static_cast<unsigned int>(time));
-  }
-
-  std::cout << "Avg time: "
-            << (std::accumulate(times.begin() + warmup, times.end(), 0u) / (times.size() - warmup))
-            << "ms. Result: " << result << std::endl;
-}
-*/
 
 
 size_t measure_time_stdexec(size_t num_threads, size_t max_value) {
@@ -120,14 +84,12 @@ size_t measure_time_stdexec(size_t num_threads, size_t max_value) {
 
   pool.emplace<execpools::tbb_thread_pool>(static_cast<int>(num_threads));
   
-  for (unsigned long i = 0; i < 1; ++i) {
-    auto snd = std::visit(
-      [&](auto&& pool) { return integrate_sender(integrate_s{0.0, fn(0.0), max_value, fn(max_value), 0.0, pool.get_scheduler()}); }, pool);
+  auto snd = std::visit(
+    [&](auto&& pool) { return integrate_sender(integrate_s{0.0, fn(0.0), max_value, fn(max_value), 0.0, pool.get_scheduler()}); }, pool);
 
-    auto time = measure<std::chrono::microseconds>(
-      [&] { std::tie(result) = stdexec::sync_wait(std::move(snd)).value(); });
-    elapsed = static_cast<unsigned int>(time);
-  }
+  auto time = measure<std::chrono::microseconds>(
+    [&] { std::tie(result) = stdexec::sync_wait(std::move(snd)).value(); });
+  elapsed = static_cast<unsigned int>(time);
 
   return elapsed;
 }
