@@ -109,6 +109,7 @@ target_link_libraries(
 add_executable(
   benchmark.fibonacci
   benchmark/fibonacci/main.cpp
+  benchmark/fibonacci/tbb.cpp
   benchmark/fibonacci/stdexec.cpp)
 target_link_libraries(
   benchmark.fibonacci
@@ -181,6 +182,7 @@ target_link_libraries(
 add_executable(
   benchmark.nqueens
   benchmark/nqueens/main.cpp
+  benchmark/nqueens/tbb.cpp
   benchmark/nqueens/stdexec.cpp)
 target_link_libraries(
   benchmark.nqueens

@@ -2,6 +2,7 @@
 #include <CLI11.hpp>
 
 void bench_fibonacci(
+  const std::string& model,
   const unsigned num_threads,
   const unsigned num_rounds,
   const unsigned num_fibonacci) {
@@ -15,7 +16,13 @@ void bench_fibonacci(
     double runtime {0.0};
 
     for(unsigned j = 0; j < num_rounds; ++j) {
-      runtime += measure_time_stdexec(num_threads, f); 
+      if (model == "stdexec") {
+        runtime += measure_time_stdexec(num_threads, f); 
+      }
+      else if (model == "tbb") {
+        runtime += measure_time_tbb(num_threads, f);
+      }
+      else assert(false);
     }
 
     std::cout << std::setw(12) << f
@@ -38,15 +45,25 @@ int main(int argc, char* argv[]) {
   
   unsigned num_fibonacci {40};
   app.add_option("-f,--fibonacci", num_fibonacci, "max number of fibonacci (default=40)");
+  
+  std::string model = "stdexec";
+  app.add_option("-m,--model", model, "model name stdexec|tbb (default=stdexec)")
+     ->check([] (const std::string& m) {
+        if(m != "stdexec" && m != "tbb") {
+          return "model name should be \"tbb\" or \"stdexec\"";
+        }
+        return "";
+     });
 
   CLI11_PARSE(app, argc, argv);
 
-  std::cout << "num_threads=" << num_threads << ' '
+  std::cout << "model="       << model << ' '
+            << "num_threads=" << num_threads << ' '
             << "num_rounds="  << num_rounds << ' '
             << "fibonacci="   << num_fibonacci << ' '
             << std::endl;
 
-  bench_fibonacci(num_threads, num_rounds, num_fibonacci);
+  bench_fibonacci(model, num_threads, num_rounds, num_fibonacci);
 
   return 0;
 }
