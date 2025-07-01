@@ -16,6 +16,7 @@
 #include <execpools/tbb/tbb_thread_pool.hpp>
 
 size_t measure_time_stdexec(size_t, size_t);
+size_t measure_time_tbb(size_t, size_t);
 
 inline constexpr int n = 10000;
 inline constexpr double epsilon = 1.0e-9;

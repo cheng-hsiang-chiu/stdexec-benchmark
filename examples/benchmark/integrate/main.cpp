@@ -2,6 +2,7 @@
 #include <CLI11.hpp>
 
 void bench_integrate(
+  const std::string& model,
   const size_t num_threads,
   const size_t num_rounds,
   const size_t max_value) {
@@ -15,7 +16,13 @@ void bench_integrate(
     double runtime {0.0};
 
     for(unsigned j  = 0; j < num_rounds; ++j) {
-      runtime += measure_time_stdexec(num_threads, v); 
+      if (model == "stdexec") {
+        runtime += measure_time_stdexec(num_threads, v); 
+      }
+      else if (model == "tbb") {
+        runtime += measure_time_tbb(num_threads, v); 
+      }
+      else assert(false);
     }
 
     std::cout << std::setw(12) << v
@@ -38,14 +45,24 @@ int main(int argc, char* argv[]) {
   size_t num_rounds {1};
   app.add_option("-r,--num_rounds", num_rounds, "number of rounds (default=1)");
 
+  std::string model = "stdexec";
+  app.add_option("-m,--model", model, "model name stdexeec|tbb (default=stdexec)")
+     ->check([] (const std::string& m) {
+        if(m != "stdexec" && m != "tbb") {
+          return "model name should be \"tbb\" or \"stdexec\"";
+        }
+        return "";
+     });
+
   CLI11_PARSE(app, argc, argv);
 
-  std::cout << "num_threads=" << num_threads << ' '
+  std::cout << "model="       << model << ' '
+            << "num_threads=" << num_threads << ' '
             << "num_rounds="  << num_rounds << ' '
             << "max_value="   << max_value << ' '
             << std::endl;
 
-  bench_integrate(num_threads, num_rounds, max_value);
+  bench_integrate(model, num_threads, num_rounds, max_value);
 
   return 0;
 }

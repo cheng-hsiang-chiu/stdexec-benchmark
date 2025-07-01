@@ -79,7 +79,6 @@ if (STDEXEC_ENABLE_TBB)
 
  add_executable(example.benchmark.fibonacci benchmark/fibonacci.cpp)
  target_link_libraries(example.benchmark.fibonacci PRIVATE STDEXEC::tbbpool)
- 
 endif()
 
 if(STDEXEC_ENABLE_TASKFLOW)
@@ -133,6 +132,7 @@ target_link_libraries(
 add_executable(
   benchmark.integrate
   benchmark/integrate/main.cpp
+  benchmark/integrate/tbb.cpp
   benchmark/integrate/stdexec.cpp)
 target_link_libraries(
   benchmark.integrate
