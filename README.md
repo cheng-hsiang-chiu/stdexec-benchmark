@@ -187,7 +187,7 @@ Perform the following actions:
 
 ```bash
 # Configure the project
-cmake -S . -B build -G<gen>
+cmake -S . -B build -G"Unix Makefiles"
 # Build the project
 cmake --build build
 ```
