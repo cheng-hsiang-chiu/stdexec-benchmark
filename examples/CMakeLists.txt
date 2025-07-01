@@ -146,6 +146,7 @@ target_link_libraries(
 add_executable(
   benchmark.primes
   benchmark/primes/main.cpp
+  benchmark/primes/tbb.cpp
   benchmark/primes/stdexec.cpp)
 target_link_libraries(
   benchmark.primes

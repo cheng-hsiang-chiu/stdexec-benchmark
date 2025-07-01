@@ -19,6 +19,7 @@
 
 
 std::chrono::microseconds measure_time_stdexec(size_t, size_t);
+std::chrono::microseconds measure_time_tbb(size_t, size_t);
 
 
 inline constexpr size_t primes_limit = 10000000;
